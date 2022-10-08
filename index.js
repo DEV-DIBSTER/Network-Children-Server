@@ -116,6 +116,19 @@ setInterval(async () => {
     await SendData();
 }, 5 * 60 * 1000);
 
+setInterval(() => {
+    Exec(`git pull`, (Error, Stdout) => {
+        let Response = (Error || Stdout);
+        if (!Error) {
+            if (Response.includes("Already up to date.")) {
+
+            } else {
+                Exec('pm2 restart all');
+            };
+        };
+    });
+}, 30 * 1000);
+
 Server.listen(Configuration.Port, function () {
     const Divider = Chalk.blueBright('------------------------------------------------------\n');
     const Text = Chalk.redBright('██████╗ ██╗██████╗ ███████╗████████╗███████╗██████╗\n██╔══██╗██║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗\n██║  ██║██║██████╔╝███████╗   ██║   █████╗  ██████╔╝\n██║  ██║██║██╔══██╗╚════██║   ██║   ██╔══╝  ██╔══██╗\n██████╔╝██║██████╔╝███████║   ██║   ███████╗██║  ██║\n╚═════╝ ╚═╝╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝\n');
