@@ -34,8 +34,6 @@ Server.get('/online', async (Request, Response) => {
 });
 
 Server.get('/stats', async (Request, Response) => {
-    if(Request.headers.password != Configuration.InComing_Password) return Response.status(403).send('Invalid Authentication.');
-
     await Response.status(200).send(await GetServerStats());
 });
 
