@@ -5,6 +5,8 @@ const SI = require('systeminformation');
 const PrettySizeJS = require('prettysize');
 const BodyParser = require('body-parser');
 const Axios = require('axios');
+const Chalk = require('chalk');
+const { GetTime } = require('./functions.js');
 
 const Configuration = require('./config.json');
 const Exec = require('child_process').exec;
@@ -44,6 +46,7 @@ async function GetServerStats(){
 
     const ResponseData = {
         //Memory Information.
+        Node: Configuration.NodeName,
         TotalMemory: PrettySizeJS(Memory.total),
         FreeMemory: PrettySizeJS(Memory.free),
         UsedMemory: PrettySizeJS(Memory.used),
@@ -85,9 +88,10 @@ async function GetServerStats(){
 
 async function SendData(){
     const Data = await GetServerStats();
+    const Date = await GetTime();
 
     await Axios({
-        url: `https://${Configuration.Domain}/stats`,
+        url: `http://${Configuration.Domain}/stats`,
         method: 'POST',
         headers: {
             'password': `${Configuration.Outgoing_Password}`,
@@ -95,9 +99,14 @@ async function SendData(){
         },
         data: Data
     }).then(Response => {
-        console.log(`[Server] | (${Response.status}) Data updated to parent server.`);
+        const Text = Chalk.bold.greenBright(`[Server] | (${Response.status})`);
+        const Text2 = Chalk.bold.blueBright(` ${Date.Time}`);
+        const Text3 = Chalk.bold.greenBright(' Data has been updated to: ');
+        const Text4 = Chalk.bold.redBright(Configuration.Domain);
+
+        console.log(`${Text}${Text2}${Text3}${Text4}`);
     }).catch(Error => {
-        console.log(Error);
+        console.log(Error.toJSON());
     });
 };
 
@@ -110,6 +119,9 @@ setInterval(async () => {
 }, 5 * 60 * 1000);
 
 Server.listen(Configuration.Port, function () {
-    console.log('-----------------------------------------------------------\n██████╗░██╗██████╗░░██████╗████████╗███████╗██████╗░\n██╔══██╗██║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗\n██║░░██║██║██████╦╝╚█████╗░░░░██║░░░█████╗░░██████╔╝\n██║░░██║██║██╔══██╗░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗\n██████╔╝██║██████╦╝██████╔╝░░░██║░░░███████╗██║░░██║\n╚═════╝░╚═╝╚═════╝░╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝\n-----------------------------------------------------------');    
-    console.log(`[Server] | Server is online at: ${Configuration.URL} at port ${Configuration.Port}!`);
+    const Divider = Chalk.blueBright('------------------------------------------------------\n');
+    const Text = Chalk.redBright('██████╗ ██╗██████╗ ███████╗████████╗███████╗██████╗\n██╔══██╗██║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗\n██║  ██║██║██████╔╝███████╗   ██║   █████╗  ██████╔╝\n██║  ██║██║██╔══██╗╚════██║   ██║   ██╔══╝  ██╔══██╗\n██████╔╝██║██████╔╝███████║   ██║   ███████╗██║  ██║\n╚═════╝ ╚═╝╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝\n');
+
+    console.log(`${Divider}${Text}${Divider}`);    
+    console.log(`${Chalk.greenBright(`[Server] | `)}${Chalk.bold.blueBright(`Server is online at: ${Configuration.URL} at port ${Configuration.Port}!`)}`);
 });
