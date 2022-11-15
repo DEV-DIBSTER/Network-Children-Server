@@ -1,7 +1,7 @@
 {
     "Incoming_Password": "",
     "Domain": "",
-
+    "NodeName": "",
     "Outgoing_Password": "",
 
     "Port": 3001
