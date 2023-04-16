@@ -1,8 +1,10 @@
 {
-    "Incoming_Password": "",
-    "Domain": "",
-    "NodeName": "",
-    "Outgoing_Password": "",
+    "Port": 3000,
+    "NodeName": "Example Node",
+    "URL": "example.com",
+    "RestartPassword": "123",
 
-    "Port": 3001
+    "Incoming_Password": "123",
+    "Domain": "parent.example.com",
+    "Outgoing_Password": "123"
 }
