@@ -2,7 +2,7 @@
     "Port": 3000,
     "NodeName": "Example Node",
     "URL": "example.com",
-    "RestartPassword": "123",
+    "Restart_Password": "123",
 
     "Incoming_Password": "123",
     "Domain": "parent.example.com",
