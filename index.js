@@ -33,6 +33,10 @@ Server.get('/online', async (Request, Response) => {
     Response.status(200).send(Data);
 });
 
+Server.get('/restart', async (Request, Response) => {  
+    Response.status(200).send("Coming Soon!");
+});
+
 Server.get('/stats', async (Request, Response) => {
     await Response.status(200).send(await GetServerStats());
 });
