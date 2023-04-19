@@ -34,6 +34,8 @@ Server.get('/online', async (Request, Response) => {
 });
 
 Server.get('/restart', async (Request, Response) => {  
+    const Password = Request.headers["password"];
+
     Response.status(200).send("Coming Soon!");
 });
 
