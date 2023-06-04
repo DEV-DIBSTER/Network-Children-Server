@@ -1,11 +1,11 @@
 const ExpressJS = require('express');
 const OS = require('os');
-const fs = require('fs');
 const SI = require('systeminformation');
 const PrettySizeJS = require('prettysize');
 const BodyParser = require('body-parser');
 const Axios = require('axios');
 const Chalk = require('chalk');
+
 const { GetTime } = require('./functions.js');
 
 const Configuration = require('./config.json');
@@ -33,8 +33,14 @@ Server.get('/online', async (Request, Response) => {
     Response.status(200).send(Data);
 });
 
-Server.get('/restart', async (Request, Response) => {  
-    Response.status(200).send("Coming Soon!");
+Server.get('/restart', async (Request, Response) => {
+    if(Request.headers.password != Configuration.Restart_Password) return Response.status(403).send("Invalid authentication!");
+
+    Response.status(200).send("Restarting in 30 seconds.");
+
+    setTimeout(async () => {
+        Exec("pm2 restart all");
+    }, 30 * 1000);
 });
 
 Server.get('/stats', async (Request, Response) => {
